@@ -12,3 +12,6 @@ aws s3api put-public-access-block \
 
 aws s3 presign s3://yimingpresigntestbucket2025/pexels-soldiervip-1386603.jpg --expires-in 3600
 
+下面就可以得到生成的 1小时后 失效URL ：
+
+https://yimingpresigntestbucket2025.s3.amazonaws.com/pexels-soldiervip-1386603.jpg?AWSAccessKeyId=AKIAUVALLJFPKAYC6DNU&Signature=UcZ514nDNwCxMmSzCrb3i%2BvsbKg%3D&Expires=1756711840
