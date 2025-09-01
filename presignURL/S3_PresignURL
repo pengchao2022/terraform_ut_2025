@@ -1,0 +1,14 @@
+1,创建存储桶
+
+aws s3 mb s3://yimingpresigntestbucket2025 --region us-east-1
+
+2,禁用默认阻止公共访问设置
+
+aws s3api put-public-access-block \
+    --bucket yimingpresigntestbucket2025 \
+    --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+
+3,设置一小时后禁止访问存储桶的对象，并生成URL 
+
+aws s3 presign s3://yimingpresigntestbucket2025/pexels-soldiervip-1386603.jpg --expires-in 3600
+
