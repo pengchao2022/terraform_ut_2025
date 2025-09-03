@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
 resource "aws_eks_cluster" "main" {
   name     = var.cluster_name
   role_arn = aws_iam_role.cluster.arn
-  version  = "1.27"
+  version  = "1.28"
 
   vpc_config {
     subnet_ids = var.subnet_ids
@@ -92,13 +92,17 @@ data "aws_ami" "ubuntu_eks" {
     values = ["available"]
   }
 }
-
+#ssh 免密
+resource "aws_key_pair" "eks_node_key" {
+  key_name   = "eks-node-keypair"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/h331ZWQQggV5Pp78eQ18Qi3lOytWJhuGacssp5gTCmuIzmMfIW+t0fhDjWq6uda1t7NeYTh0zu5+36vkiy5s3Gr1M764X3qGKeGFmC7qe1kyF7RtVoZ4adufBgoNxtWi9zGmSBVi3G98YLhq0Tuj0mV9FT9l1F3NBOd3YbtCSWJ3Lx3WH9hMJ7eGAsBek8hatCtlDIFMQeF/xW4WBufWYkghjJE0G/Z9q4bJewrERD4B7GlDe+GGN8wAvehKKASySWgeeIwu+w6LYR7yzi+hyCCL+jyiycJ113u0gMo/oavdlFlVUeoJhmjsL46sjpgKPr2Yb0GhEVBOCW/rBXPFq+24zx/uds1PK/HtVNanr5kQBpJ4yT57hKhKhuNXWhJwuwQpzEFkwt36RqNFC/7CpH0BiRaafHDggBSnzPsNEECHnPnfgvzfcKoxMNcbbgYwZxNFEBD2Bjd11T1iS0aIxlO7RA2IMGl0Ch03lE3ztbiafRVIw6pTy09ehi7e+NE= pengchaoma@Pengchaos-MacBook-Pro.local" # 替换为您的公钥内容
+}
 # 创建启动模板（用于指定 Ubuntu AMI）
 resource "aws_launch_template" "ubuntu_eks" {
   name_prefix   = "${var.cluster_name}-ubuntu-"
   image_id      = data.aws_ami.ubuntu_eks.id
   instance_type = "t3.medium"
-  key_name      = var.key_name != "" ? var.key_name : null
+  key_name = aws_key_pair.eks_node_key.key_name
 
   block_device_mappings {
     device_name = "/dev/sda1"

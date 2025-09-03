@@ -14,8 +14,3 @@ variable "cluster_name" {
   default     = "my-eks-cluster"
 }
 
-variable "key_name" {
-  description = "SSH key pair name for EC2 instances"
-  type        = string
-  default     = "" # 如果不需要 SSH 访问，可以留空
-}
