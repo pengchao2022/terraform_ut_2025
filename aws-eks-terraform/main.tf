@@ -77,19 +77,23 @@ resource "aws_iam_instance_profile" "node" {
   role = aws_iam_role.node.name
 }
 
-# 查找最新的 Ubuntu EKS 优化 AMI
 data "aws_ami" "ubuntu_eks" {
   most_recent = true
   owners      = ["099720109477"] # Canonical 的官方账号
 
   filter {
     name   = "name"
-    values = ["ubuntu-eks/k8s_${aws_eks_cluster.main.version}/node-*-20.04-amd64-*"]
+    values = ["ubuntu-eks/*20.04*"]  # 更通用的匹配模式
   }
 
   filter {
     name   = "state"
     values = ["available"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 }
 #ssh 免密
