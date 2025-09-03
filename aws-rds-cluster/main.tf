@@ -64,6 +64,13 @@ resource "aws_security_group" "rds_sg" {
     cidr_blocks = ["0.0.0.0/0"] # 生产环境中应限制为特定IP范围
   }
 
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"] # 生产环境中应限制为特定IP范围
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
