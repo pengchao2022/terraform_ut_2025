@@ -70,8 +70,6 @@ resource "aws_instance" "ec2_instance" {
   vpc_security_group_ids = data.aws_instance.existing.vpc_security_group_ids
   key_name               = data.aws_instance.existing.key_name
   availability_zone      = data.aws_instance.existing.availability_zone
-  monitoring             = data.aws_instance.existing.monitoring
-  tenancy                = data.aws_instance.existing.placement.tenancy
 
   # 保持原有标签
   tags = data.aws_instance.existing.tags
@@ -85,3 +83,4 @@ resource "aws_instance" "ec2_instance" {
     aws_iam_instance_profile.ec2_s3_profile
   ]
 }
+
