@@ -22,7 +22,6 @@ resource "aws_iam_policy" "s3_access_policy" {
 # 2. 创建 IAM 角色
 resource "aws_iam_role" "ec2_s3_role" {
   name               = var.role_name
-  description        = "允许 EC2 实例访问 S3 的角色"
   tags               = var.tags
 
   assume_role_policy = jsonencode({
