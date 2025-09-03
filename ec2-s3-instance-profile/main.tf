@@ -1,6 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
 
 # 1. 创建 IAM 策略，允许 S3 访问
 resource "aws_iam_policy" "s3_access_policy" {
