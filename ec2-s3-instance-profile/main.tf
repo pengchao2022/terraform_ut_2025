@@ -66,6 +66,7 @@ resource "null_resource" "attach_iam_role" {
   provisioner "local-exec" {
     command = <<EOT
       aws ec2 associate-iam-instance-profile \
+        --region ${var.aws_region} \
         --instance-id ${var.ec2_instance_id} \
         --iam-instance-profile Name=${aws_iam_instance_profile.ec2_s3_profile.name}
     EOT
@@ -75,10 +76,5 @@ resource "null_resource" "attach_iam_role" {
     aws_iam_instance_profile.ec2_s3_profile
   ]
 }
+  
 
-# 或者方法二：使用aws_iam_instance_profile_attachment资源（如果可用）
-# 注意：这个资源类型在某些Terraform版本中可能不可用
-# resource "aws_iam_instance_profile_attachment" "example" {
-#   instance_id       = var.ec2_instance_id
-#   instance_profile_name = aws_iam_instance_profile.ec2_s3_profile.name
-# }
