@@ -2,7 +2,6 @@
 # 1. 创建 IAM 策略，允许 S3 访问
 resource "aws_iam_policy" "s3_access_policy" {
   name        = var.policy_name
-  description = "允许 EC2 实例访问 S3 存储桶 ${var.bucket_name}"
   tags        = var.tags
 
   policy = jsonencode({
