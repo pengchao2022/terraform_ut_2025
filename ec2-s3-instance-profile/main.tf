@@ -1,4 +1,3 @@
-
 # 1. 创建 IAM 策略，允许 S3 访问
 resource "aws_iam_policy" "s3_access_policy" {
   name        = var.policy_name
@@ -51,30 +50,25 @@ resource "aws_iam_instance_profile" "ec2_s3_profile" {
   tags = var.tags
 }
 
+# 5. 获取现有EC2实例信息
 data "aws_instance" "existing" {
   instance_id = var.ec2_instance_id
 }
 
-resource "aws_instance" "ec2_instance" {
-  # 必须的参数
-  ami           = data.aws_instance.existing.ami
-  instance_type = data.aws_instance.existing.instance_type
-  
-  # 关键：只修改 IAM 实例配置文件
-  iam_instance_profile = aws_iam_instance_profile.ec2_s3_profile.name
+# 6. 使用null_resource或直接使用AWS CLI来附加IAM角色到现有实例
+# 方法一：使用null_resource执行AWS CLI命令
+resource "null_resource" "attach_iam_role" {
+  triggers = {
+    instance_id    = var.ec2_instance_id
+    profile_name   = aws_iam_instance_profile.ec2_s3_profile.name
+  }
 
-  # 保持所有其他配置完全不变
-  subnet_id              = data.aws_instance.existing.subnet_id
-  vpc_security_group_ids = data.aws_instance.existing.vpc_security_group_ids
-  key_name               = data.aws_instance.existing.key_name
-  availability_zone      = data.aws_instance.existing.availability_zone
-
-  # 保持原有标签
-  tags = data.aws_instance.existing.tags
-
-  # 非常重要的：忽略所有其他属性的变化
-  lifecycle {
-    ignore_changes = all
+  provisioner "local-exec" {
+    command = <<EOT
+      aws ec2 associate-iam-instance-profile \
+        --instance-id ${var.ec2_instance_id} \
+        --iam-instance-profile Name=${aws_iam_instance_profile.ec2_s3_profile.name}
+    EOT
   }
 
   depends_on = [
@@ -82,3 +76,9 @@ resource "aws_instance" "ec2_instance" {
   ]
 }
 
+# 或者方法二：使用aws_iam_instance_profile_attachment资源（如果可用）
+# 注意：这个资源类型在某些Terraform版本中可能不可用
+# resource "aws_iam_instance_profile_attachment" "example" {
+#   instance_id       = var.ec2_instance_id
+#   instance_profile_name = aws_iam_instance_profile.ec2_s3_profile.name
+# }

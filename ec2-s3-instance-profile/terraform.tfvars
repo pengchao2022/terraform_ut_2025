@@ -1,12 +1,11 @@
-aws_region          = "us-east-1"
-bucket_name         = "s3eastusiloveyou2000"
-ec2_instance_id     = "i-0f170df4d5e821418"
-role_name           = "Ec2S3Role"
-policy_name         = "Ec2S3AccessPolicy"
-instance_profile_name = "Oms-Ec2-Instance-profile"
-
+# terraform.tfvars
+ec2_instance_id = "i-083ccca081df0a231"
+policy_name = "awsdevopsec2policy"
+role_name = "aws-devops-ec2-s3-role"
+instance_profile_name = "awsyiming-ec2-s3-profile"
+bucket_name = "pythongotos3presign2020"
+s3_actions = ["s3:GetObject", "s3:ListBucket"]
 tags = {
   Environment = "production"
-  Project     = "OMS orders"
-  Owner       = "devops-Yiming"
+  Project     = "terraform-IaC-project"
 }
