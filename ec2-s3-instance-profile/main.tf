@@ -53,8 +53,35 @@ resource "aws_iam_instance_profile" "ec2_s3_profile" {
   tags = var.tags
 }
 
-# 5. 将实例配置文件附加到已存在的 EC2 实例
-resource "aws_iam_instance_profile_association" "ec2_association" {
-  instance_id        = var.ec2_instance_id
-  instance_profile_id = aws_iam_instance_profile.ec2_s3_profile.id
+data "aws_instance" "existing" {
+  instance_id = var.ec2_instance_id
+}
+
+resource "aws_instance" "ec2_instance" {
+  # 必须的参数
+  ami           = data.aws_instance.existing.ami
+  instance_type = data.aws_instance.existing.instance_type
+  
+  # 关键：只修改 IAM 实例配置文件
+  iam_instance_profile = aws_iam_instance_profile.ec2_s3_profile.name
+
+  # 保持所有其他配置完全不变
+  subnet_id              = data.aws_instance.existing.subnet_id
+  vpc_security_group_ids = data.aws_instance.existing.vpc_security_group_ids
+  key_name               = data.aws_instance.existing.key_name
+  availability_zone      = data.aws_instance.existing.availability_zone
+  monitoring             = data.aws_instance.existing.monitoring
+  tenancy                = data.aws_instance.existing.placement.tenancy
+
+  # 保持原有标签
+  tags = data.aws_instance.existing.tags
+
+  # 非常重要的：忽略所有其他属性的变化
+  lifecycle {
+    ignore_changes = all
+  }
+
+  depends_on = [
+    aws_iam_instance_profile.ec2_s3_profile
+  ]
 }
