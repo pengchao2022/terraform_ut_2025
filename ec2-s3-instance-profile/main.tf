@@ -1,3 +1,6 @@
+provider "aws" {
+  region = var.aws_region
+}
 
 # 1. 创建 IAM 策略，允许 S3 访问
 resource "aws_iam_policy" "s3_access_policy" {
@@ -53,3 +56,8 @@ resource "aws_iam_instance_profile" "ec2_s3_profile" {
   tags = var.tags
 }
 
+# 5. 将实例配置文件附加到已存在的 EC2 实例
+resource "aws_iam_instance_profile_association" "ec2_association" {
+  instance_id        = var.ec2_instance_id
+  instance_profile_id = aws_iam_instance_profile.ec2_s3_profile.id
+}
