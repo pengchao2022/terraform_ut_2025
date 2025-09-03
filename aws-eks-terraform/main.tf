@@ -99,7 +99,7 @@ resource "aws_key_pair" "eks_node_key" {
 resource "aws_launch_template" "ubuntu_eks" {
   name_prefix   = "${var.cluster_name}-ubuntu-"
   image_id      = data.aws_ami.ubuntu_eks.id
-  instance_type = "t3.medium"
+  instance_type = "t3.micro"
   key_name = aws_key_pair.eks_node_key.key_name
 
   block_device_mappings {
