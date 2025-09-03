@@ -2,6 +2,7 @@ provider "aws" {
   region = "us-east-1"  # 可以根据需要修改区域
 }
 
+
 resource "aws_s3_bucket" "public_bucket" {
   bucket = "mys3publicaccessbucket007abcyt"
   
@@ -10,6 +11,7 @@ resource "aws_s3_bucket" "public_bucket" {
     Environment = "Test"
   }
 }
+
 
 # 禁用默认的阻止公共访问策略
 resource "aws_s3_bucket_public_access_block" "public_access" {
