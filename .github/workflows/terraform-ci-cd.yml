@@ -13,7 +13,7 @@ jobs:
     # 根据你的实际目录名称选择其中一个：
     defaults:
       run:
-        working-directory: ./ec2-s3-instance-profile      # 如果目录名为 infra
+        working-directory: ./aws-rds-cluster     # 如果目录名为 infra
         # working-directory: ./terraform   # 如果目录名为 terraform
         # working-directory: ./iac         # 如果目录名为 iac (Infrastructure as Code)
         # working-directory: ./deploy      # 如果目录名为 deploy

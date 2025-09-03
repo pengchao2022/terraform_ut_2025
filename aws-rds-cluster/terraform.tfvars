@@ -1,0 +1,11 @@
+region               = "us-east-1"
+vpc_id               = "vpc-0da15f23ae6537487"
+db_subnet_group_name = "rds-production-db-group"
+db_subnet_ids        = ["subnet-032f60cb3137395c0", "subnet-01e403340dfcbc19d", "subnet-0237c2740cf62bb81"]
+db_instance_class    = "db.t3.micro"
+db_engine            = "mysql"
+db_engine_version    = "8.0"
+db_name              = "yimingdatabase"
+db_username          = "admin"
+secret_name          = "rds/yiming/credentials"
+password_length      = 16
