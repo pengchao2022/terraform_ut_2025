@@ -12,12 +12,6 @@ output "instance_profile_name" {
   description = "创建的实例配置文件名称"
   value       = aws_iam_instance_profile.ec2_s3_profile.name
 }
-
-output "instance_profile_association_id" {
-  description = "实例配置文件关联 ID"
-  value       = aws_iam_instance_profile_association.ec2_association.id
-}
-
 output "ec2_instance_id" {
   description = "目标 EC2 实例 ID"
   value       = var.ec2_instance_id
