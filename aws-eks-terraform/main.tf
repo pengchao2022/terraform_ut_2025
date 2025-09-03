@@ -71,12 +71,6 @@ resource "aws_iam_role_policy_attachment" "node_AmazonEC2ContainerRegistryReadOn
   role       = aws_iam_role.node.name
 }
 
-# IAM 实例配置文件
-resource "aws_iam_instance_profile" "node" {
-  name = "${var.cluster_name}-node-instance-profile"
-  role = aws_iam_role.node.name
-}
-
 data "aws_ami" "ubuntu_eks" {
   most_recent = true
   owners      = ["099720109477"] # Canonical 的官方账号
@@ -134,10 +128,6 @@ EOT
     }
   }
 
-  # IAM 实例配置文件
-  iam_instance_profile {
-    name = aws_iam_instance_profile.node.name
-  }
 }
 
 # 创建使用 Ubuntu 的节点组
